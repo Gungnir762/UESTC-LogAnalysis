@@ -53,11 +53,6 @@ def histories_query():
     with db.engine.connect() as conn:
         results = conn.execute(sqlalchemy.text(sql_text))
         return render_template('histories.html', results=results)
-    # with app.app_context():
-    #     with db.engine.connect() as conn:
-    #         rs = conn.execute(sqlalchemy.text(sql_text))
-    #         print(rs)
-    #         # return render_template('histories.html', data_dict=rs)
 
 
 if __name__ == "__main__":
