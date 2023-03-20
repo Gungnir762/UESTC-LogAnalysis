@@ -14,6 +14,7 @@ app.config[
     'SQLALCHEMY_DATABASE_URI'] = rf"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8mb4"
 
 db = SQLAlchemy()
+db.init_app(app)
 
 
 @app.route('/')
@@ -43,15 +44,20 @@ def histories_query():
     time_begin = request.form["time_begin"]
     date_end = request.form["date_end"]
     time_end = request.form["time_end"]
-    sql_text = f"select * from event where time between " \
-               f"STR_TO_DATE('{date_begin} {time_begin}','%m-%d-%Y %H:%i:%s')) and '" \
-               f"STR_TO_DATE('{date_end} {time_end}','%m-%d-%Y %H:%i:%s'))"
+    sql_text = f"select event_id,type,username,inet_ntoa(s_ip),s_port,inet_ntoa(d_ip),d_port,time " \
+               f"from event where time between " \
+               f"STR_TO_DATE('{date_begin} {time_begin}','%m-%d-%Y %H:%i:%s') and " \
+               f"STR_TO_DATE('{date_end} {time_end}','%m-%d-%Y %H:%i:%s')"
     print(sql_text)
-    with app.app_context():
-        with db.engine.connect() as conn:
-            rs = conn.execute(sqlalchemy.text(sql_text))
-            print(rs)
-            # return render_template('histories.html', data_dict=rs)
+
+    with db.engine.connect() as conn:
+        results = conn.execute(sqlalchemy.text(sql_text))
+        return render_template('histories.html', results=results)
+    # with app.app_context():
+    #     with db.engine.connect() as conn:
+    #         rs = conn.execute(sqlalchemy.text(sql_text))
+    #         print(rs)
+    #         # return render_template('histories.html', data_dict=rs)
 
 
 if __name__ == "__main__":
