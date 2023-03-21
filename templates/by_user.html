@@ -2,28 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>按登录时间查找登录记录</title>
+    <title>按事件分类查找登录记录</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'sheet.css') }}">
-
 </head>
 <body>
 
 <div>
-    <h4>按历史登录记录查询数据</h4>
+    <h4>按用户名查找登录记录</h4>
 
-    <form action="/by_date_query/" method="POST">
+    <form action="/by_user_query/" method="POST">
         <p>
-            <label for="date_begin"> 起始日期：</label>
-            <input type="text" id=date_begin name=date_begin value="11-01-2014"/>
-
-            <label for="time_begin"> 起始时间：</label>
-            <input type="text" id="time_begin" name=time_begin value="09:00:00"/>
-
-            <label for="date_end"> 截止日期：</label>
-            <input type="text" id=date_end name=date_end value="12-01-2014"/>
-
-            <label for="time_end"> 截止时间：</label>
-            <input type="text" id="time_end" name=time_end value="19:00:00"/>
+            <label for="username"> 用户名：</label>
+            <input type="text" id=username name=username value="root"/>
 
             <input type="submit" value="查询"/>
         </p>

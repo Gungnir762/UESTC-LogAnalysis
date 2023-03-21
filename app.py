@@ -27,14 +27,14 @@ def by_date():
     return render_template('by_date.html')
 
 
-@app.route('/by_login_failed/')
-def by_login_failed():
-    return render_template('by_login_failed.html')
+@app.route('/by_login_event/')
+def by_login_event():
+    return render_template('by_login_event.html')
 
 
-@app.route('/by_user_login/')
-def by_user_login():
-    return render_template('by_user_login.html')
+@app.route('/by_user/')
+def by_user():
+    return render_template('by_user.html')
 
 
 @app.route('/by_date_query/', methods=['POST', 'GET'])
@@ -52,6 +52,29 @@ def by_date_query():
     with db.engine.connect() as conn:
         results = conn.execute(sqlalchemy.text(sql_text))
         return render_template('by_date.html', results=results)
+
+
+@app.route('/by_login_event_query/', methods=['POST'])
+def by_login_event_query():
+    # 需要修改
+    event_type = request.form["event_type"]
+    sql_text = rf"select event_id,type,username,inet_ntoa(s_ip),s_port,inet_ntoa(d_ip),d_port,time " \
+               f"from event where type='{event_type}'"
+    print(sql_text)
+    with db.engine.connect() as conn:
+        results = conn.execute(sqlalchemy.text(sql_text))
+        return render_template('by_login_event.html', results=results)
+
+
+@app.route('/by_user_query/', methods=['POST'])
+def by_user_query():
+    username = request.form["username"]
+    sql_text = rf"select event_id,type,username,inet_ntoa(s_ip),s_port,inet_ntoa(d_ip),d_port,time " \
+               f"from event where username='{username}'"
+    print(sql_text)
+    with db.engine.connect() as conn:
+        results = conn.execute(sqlalchemy.text(sql_text))
+        return render_template('by_user.html', results=results)
 
 
 if __name__ == "__main__":
