@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>历史登录记录查看</title>
+    <style>
+    .table11_6 table {
+        width:100%;
+        margin:15px 0;
+        border:0;
+    }
+    .table11_6 th {
+        background-color:#96C7ED;
+        color:#000000
+    }
+    .table11_6,.table11_6 th,.table11_6 td {
+        font-size:0.95em;
+        text-align:center;
+        padding:4px;
+        border-collapse:collapse;
+    }
+    .table11_6 th,.table11_6 td {
+        border: 1px solid #73b4e7;
+        border-width:1px 0 1px 0;
+        border:2px inset #ffffff;
+    }
+    .table11_6 tr {
+        border: 1px solid #ffffff;
+    }
+    .table11_6 tr:nth-child(odd){
+        background-color:#dcecf9;
+    }
+    .table11_6 tr:nth-child(even){
+        background-color:#ffffff;
+    }
+
+    </style>
+</head>
+<body>
+
+<div>
+    <h4>按历史登录记录查询数据</h4>
+
+    <form action="/by_date_query/" method="POST">
+        <p>
+            <label for="date_begin"> 日期：</label>
+            <input type="text" id=date_begin name=date_begin value="11-01-2014"/>
+
+            <label for="time_begin"> 起始时间：</label>
+            <input type="text" id="time_begin" name=time_begin value="09:00:00"/>
+
+            <label for="date_end"> 日期：</label>
+            <input type="text" id=date_end name=date_end value="12-01-2014"/>
+
+            <label for="time_end"> 截止时间：</label>
+            <input type="text" id="time_end" name=time_end value="19:00:00"/>
+
+            <input type="submit" value="查询"/>
+        </p>
+    </form>
+
+    <table border="1" class=table11_6 width="30%">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>type</th>
+            <th>username</th>
+            <th>s_ip</th>
+            <th>s_port</th>
+            <th>d_ip</th>
+            <th>d_port</th>
+            <th>time</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+        <tr>
+            <td>{{ result[0]}}</td>
+            <td nowrap>{{ result[1]}}</td>
+            <td>{{ result[2]}}</td>
+            <td>{{ result[3]}}</td>
+            <td>{{ result[4]}}</td>
+            <td>{{ result[5]}}</td>
+            <td>{{ result[6]}}</td>
+            <td nowrap>{{ result[7]}}</td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

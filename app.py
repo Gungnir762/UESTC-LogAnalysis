@@ -22,24 +22,23 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/histories/')
-def histories():
-    return render_template('histories.html')
-    # return "histories"
+@app.route('/by_date/')
+def by_date():
+    return render_template('by_date.html')
 
 
-@app.route('/login_failed/')
-def login_failed():
-    return render_template('login_failed.html')
+@app.route('/by_login_failed/')
+def by_login_failed():
+    return render_template('by_login_failed.html')
 
 
-@app.route('/root_login/')
-def root_login():
-    return render_template('root_login.html')
+@app.route('/by_user_login/')
+def by_user_login():
+    return render_template('by_user_login.html')
 
 
-@app.route('/histories_query/', methods=['POST', 'GET'])
-def histories_query():
+@app.route('/by_date_query/', methods=['POST', 'GET'])
+def by_date_query():
     date_begin = request.form["date_begin"]
     time_begin = request.form["time_begin"]
     date_end = request.form["date_end"]
@@ -52,7 +51,7 @@ def histories_query():
 
     with db.engine.connect() as conn:
         results = conn.execute(sqlalchemy.text(sql_text))
-        return render_template('histories.html', results=results)
+        return render_template('by_date.html', results=results)
 
 
 if __name__ == "__main__":
