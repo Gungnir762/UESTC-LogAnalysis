@@ -3,16 +3,7 @@ from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
-
-HOSTNAME = "localhost"
-PORT = 3306
-USERNAME = "zyr"
-PASSWORD = "123456"
-DATABASE = "forensicsdb"
-
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = rf"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8mb4"
-
+app.config.from_object('config')
 db = SQLAlchemy()
 db.init_app(app)
 
