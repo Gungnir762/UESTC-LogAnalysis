@@ -66,9 +66,9 @@ def UpdateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
 
             # 获得日志时间
             time = LogtoTime(strlist[0])
-            if time > cur_time:
+            if time < cur_time:
                 continue
-            if time < last_time:
+            if time > last_time:
                 break
 
             # 检查日志是否为ssh相关
