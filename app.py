@@ -28,12 +28,13 @@ def by_user():
     return render_template('by_user.html')
 
 
-@app.route('/by_date_query/', methods=['POST', 'GET'])
+@app.route('/by_date_query/', methods=['POST'])
 def by_date_query():
     date_begin = request.form["date_begin"]
     time_begin = request.form["time_begin"]
     date_end = request.form["date_end"]
     time_end = request.form["time_end"]
+    # 提交的日期数据为月-日-年的写法
     sql_text = f"select event_id,type,username,inet_ntoa(s_ip),s_port,inet_ntoa(d_ip),d_port,time " \
                f"from event where time between " \
                f"STR_TO_DATE('{date_begin} {time_begin}','%m-%d-%Y %H:%i:%s') and " \
