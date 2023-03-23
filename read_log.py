@@ -2,7 +2,7 @@ import re
 from datetime import datetime, timedelta
 
 
-class message_class(object):
+class Message(object):
     def __init__(self, time, log_type, username, s_ip, s_port, session_id):
         self.time = time
         self.log_type = log_type
@@ -22,8 +22,8 @@ class message_class(object):
 
 
 # 将日志中以字符串表示的时间转换为datetime类型
-def LogtoTime(time_str):
-    time_match = re.match(r"(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3,8})(-|\+)(\d{2}):(\d{2})",
+def log2time(time_str):
+    time_match = re.match(r"(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3,8})([-+])(\d{2}):(\d{2})",
                           time_str)
     time_datetime = datetime(int(time_match.group(1)), int(time_match.group(2)), int(time_match.group(3)),
                              int(time_match.group(4)), int(time_match.group(5)), int(time_match.group(6)),
@@ -54,26 +54,28 @@ def LogtoTime(time_str):
 #  "s_port"：用户端口,
 #  "d_port"：服务端端口}
 # 时间是datetime类型，其它是str类型
-def UpdateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
+def updateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
     cur_time = datetime.now()
     cur_d_port = last_d_port
     message_list = []
     dict_list = []
     with open(file_path) as file:
-        lines = file.readlines();
+        lines = file.readlines()
+        # for line in lines:
+        #     print(line)
         for id, line in enumerate(lines):
             strlist = line.split()
 
             # 获得日志时间
-            time = LogtoTime(strlist[0])
-            if time < cur_time:
+            time = log2time(strlist[0])
+            if time < last_time:
                 continue
-            if time > last_time:
+            if time > cur_time:
                 break
 
             # 检查日志是否为ssh相关
             sshd_check = re.match(r"sshd\[(\d*)]", strlist[2])
-            if sshd_check == None:
+            if not sshd_check:
                 continue
 
             # 密码正确
@@ -82,14 +84,14 @@ def UpdateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
                 s_ip = strlist[8]
                 s_port = strlist[10]
                 message_list.append(
-                    message_class(time, "correct.password", name, s_ip, s_port, int(sshd_check.group(1))))
+                    Message(time, "correct.password", name, s_ip, s_port, int(sshd_check.group(1))))
 
             # 密码错误
             elif strlist[3] == "Failed":
                 name = strlist[6]
                 s_ip = strlist[8]
                 s_port = strlist[10]
-                message_list.append(message_class(time, "wrong.password", name, s_ip, s_port, int(sshd_check.group(1))))
+                message_list.append(Message(time, "wrong.password", name, s_ip, s_port, int(sshd_check.group(1))))
 
             # 会话状态
             elif strlist[3] == "pam_unix(sshd:session):":
@@ -101,7 +103,7 @@ def UpdateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
                     for message in message_list:
                         if message.session_id == session_id:
                             message_list.append(
-                                message_class(time, "login", name, message.s_ip, message.s_port, session_id))
+                                Message(time, "login", name, message.s_ip, message.s_port, session_id))
                             break
 
                 # 关闭会话
@@ -111,14 +113,14 @@ def UpdateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
                     for message in message_list:
                         if message.session_id == session_id:
                             message_list.append(
-                                message_class(time, "logout", name, message.s_ip, message.s_port, session_id))
+                                Message(time, "logout", name, message.s_ip, message.s_port, session_id))
                             break
 
             # 服务器端口变化
             elif strlist[3] == "Server":
                 if re.match(r"\d*\.", strlist[8]):
                     d_port = strlist[8].split('.')[0]
-                    message_list.append(message_class(time, "set.port", '', '', '', ''))
+                    message_list.append(Message(time, "set.port", '', '', '', ''))
                     message_list[-1].set_d_port(d_port)
 
     for message in message_list:
@@ -128,3 +130,11 @@ def UpdateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
             message.d_port = cur_d_port
             dict_list.append(message.get_dict())
     return [dict_list, cur_d_port, cur_time]
+
+
+if __name__ == "__main__":
+    data = updateDB("./forensics.log")
+    print(rf"cur_d_port: {data[1]}")
+    print(rf"cur_time: {data[2]}")
+    for d in data[0]:
+        print(d)
