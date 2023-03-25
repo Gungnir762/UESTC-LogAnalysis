@@ -54,7 +54,7 @@ def log2time(time_str):
 #  "s_port"：用户端口,
 #  "d_port"：服务端端口}
 # 时间是datetime类型，其它是str类型
-def updateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
+def get_message_list(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
     cur_time = datetime.now()
     cur_d_port = last_d_port
     message_list = []
@@ -133,7 +133,7 @@ def updateDB(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
 
 
 if __name__ == "__main__":
-    data = updateDB("./forensics.log")
+    data = get_message_list("./forensics.log")
     print(rf"cur_d_port: {data[1]}")
     print(rf"cur_time: {data[2]}")
     for d in data[0]:

@@ -1,4 +1,4 @@
-from read_log import updateDB
+from logParse import get_message_list
 import requests
 from flask import Flask
 from IPy import IP
@@ -20,7 +20,7 @@ def get_ip():
     return response.json()['ip']
 
 
-def writeDB(data):
+def insert_data(data):
     event_data_list = data[0]
     cur_d_port = data[1]
     cur_time = data[2]
@@ -41,6 +41,8 @@ def writeDB(data):
 
 
 if __name__ == "__main__":
-    data = updateDB("./forensics.log")
+    log_path = "./forensics.log"
+    data = get_message_list(log_path)
     with app.app_context():
-        writeDB(data)
+        insert_data(data)
+    print("insert data successfully")
