@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from logParse import get_message_list
 import requests
 from flask import Flask
@@ -45,4 +47,4 @@ if __name__ == "__main__":
     data = get_message_list(log_path)
     with app.app_context():
         insert_data(data)
-    print("insert data successfully")
+    print(f"insert data successfully,{datetime.now()}")
