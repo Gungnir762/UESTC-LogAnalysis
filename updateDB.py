@@ -42,17 +42,19 @@ def insert_data(data):
 
 
 if __name__ == "__main__":
-    path=r'config/updateDBConfig.yaml'
+    path = r'config/updateDBConfig.yaml'
     config = read_config(path)
     log_path = config["log_path"]
     last_update_time = datetime.strptime(config["last_update_time"], "%Y-%m-%d %H:%M:%S")
     last_d_port = config["last_d_port"]
 
+    # 写入数据库
     data = get_message_list(log_path, last_d_port, last_update_time)
     with app.app_context():
         insert_data(data)
     print(f"insert data successfully,{datetime.now()}")
 
+    # 更新配置文件
     cur_d_port = data[1]
     cur_time = data[2].strftime("%Y-%m-%d %H:%M:%S")
     yaml_update = {"log_path": log_path, "last_update_time": cur_time, "last_d_port": cur_d_port}
