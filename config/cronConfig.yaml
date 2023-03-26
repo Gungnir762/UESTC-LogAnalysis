@@ -1,0 +1,6 @@
+#系统登录用户名
+user: 'zyr'
+#程序路径
+program_path: '/home/zyr/test/'
+#cron计划任务执行间隔（单位：分钟）
+cron_interval: 1
