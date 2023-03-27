@@ -10,7 +10,7 @@ def read_config(path):
 
 
 if __name__ == '__main__':
-    config = read_config(r'home/kali/test/config/cronConfig.yaml')
+    config = read_config(r'/home/kali/test/config/cronConfig.yaml')
     user = config['user']
     program_path = config['program_path']
     cron_interval = config['cron_interval']
