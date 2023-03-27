@@ -42,7 +42,7 @@ def insert_data(data):
 
 
 if __name__ == "__main__":
-    path = r'config/updateDBConfig.yaml'
+    path = r'./config/updateDBConfig.yaml'
     config = read_config(path)
     log_path = config["log_path"]
     last_update_time = datetime.strptime(config["last_update_time"], "%Y-%m-%d %H:%M:%S")
