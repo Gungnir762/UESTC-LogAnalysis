@@ -51,7 +51,11 @@ if __name__ == "__main__":
     # 写入数据库
     data = get_message_list(log_path, last_d_port, last_update_time)
     with app.app_context():
-        insert_data(data)
+        try:
+            insert_data(data)
+        except Exception as e:
+            print(f"insert data error,{datetime.now()}")
+            print(e)
     print(f"insert data successfully,{datetime.now()}")
 
     # 更新配置文件
