@@ -1,6 +1,8 @@
 from crontab import CronTab
 import subprocess
 import yaml
+import argparse
+import os
 
 
 def read_config(path):
@@ -10,17 +12,29 @@ def read_config(path):
 
 
 if __name__ == '__main__':
-    config = read_config(r'/home/kali/test/config/cronConfig.yaml')
+    parser = argparse.ArgumentParser(description='Test for argparse')
+    parser.add_argument('--program_path', '-p', help='program_path 程序所在路径 必要参数')
+    parser.add_argument('--log_path', '-l', help='log_path，非必要参数，但是有默认值',
+                        default="/home/zyr/test/UESTC-LogAnalysis/forensics.log")
+
+    program_path = parser.parse_args().program_path
+    log_path = parser.parse_args().log_path
+    # print(program_path)
+    # print(log_path)
+
+    path = os.path.abspath(os.path.join(program_path, r'./config/cronConfig.yaml'))
+    config = read_config(path)
     user = config['user']
-    program_path = config['program_path']
     cron_interval = config['cron_interval']
+
     # print(config)
     # print(type(config))
 
     with CronTab(user=user) as cron:
         # 测试用
         # job = cron.new(command=rf'echo "hello world,`date`" >> {program_path}cron.log')
-        job = cron.new(command=rf'python3 {program_path}updateDB.py >> {program_path}cron.log')
+        job = cron.new(
+            command=rf'python3 {program_path}updateDB.py -p {program_path} >> {program_path}cron.log 2>&1 </dev/null &')
         job.minute.every(cron_interval)
         print("restarting cron service")
     subprocess.call("sudo service cron restart", shell=True)

@@ -1,3 +1,2 @@
-last_d_port: ''
-last_update_time: '2000-01-01 00:00:00'
-log_path: /var/log/forensics.log
+last_d_port: '22'
+last_update_time: '2023-03-27 21:05:23'
