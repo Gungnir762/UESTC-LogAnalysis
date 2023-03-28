@@ -19,7 +19,7 @@ if __name__ == '__main__':
     program_path = parser.parse_args().program_path
     log_path = parser.parse_args().log_path
 
-    path = os.path.join(program_path, r'/config/cronConfig.yaml')
+    path = os.path.abspath(os.path.join(program_path, r'/config/cronConfig.yaml'))
     config = read_config(path)
     user = config['user']
     cron_interval = config['cron_interval']

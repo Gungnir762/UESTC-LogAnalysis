@@ -51,7 +51,7 @@ if __name__ == "__main__":
     log_path = parser.parse_args().log_path
     program_path = parser.parse_args().program_path
 
-    path = os.path.join(program_path, r'/config/updateDBConfig.yaml')
+    path = os.path.abspath(os.path.join(program_path, r'/config/updateDBConfig.yaml'))
     # 读取配置文件
     config = read_config(path)
     last_update_time = datetime.strptime(config["last_update_time"], "%Y-%m-%d %H:%M:%S")
