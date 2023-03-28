@@ -1,3 +1,5 @@
+import argparse
+import os
 from datetime import datetime
 import requests
 import yaml
@@ -42,9 +44,16 @@ def insert_data(data):
 
 
 if __name__ == "__main__":
-    path = r'./config/updateDBConfig.yaml'
+    parser = argparse.ArgumentParser(description='Test for argparse')
+    parser.add_argument('--log_path', '-l', help='log_path，非必要参数，但是有默认值', default="./forensics.log")
+    parser.add_argument('--program_path', '-p', help='program_path 程序所在路径 必要参数')
+
+    log_path = parser.parse_args().log_path
+    program_path = parser.parse_args().program_path
+
+    path = os.path.join(program_path, r'/config/updateDBConfig.yaml')
+    # 读取配置文件
     config = read_config(path)
-    log_path = config["log_path"]
     last_update_time = datetime.strptime(config["last_update_time"], "%Y-%m-%d %H:%M:%S")
     last_d_port = config["last_d_port"]
 
@@ -61,6 +70,6 @@ if __name__ == "__main__":
     # 更新配置文件
     cur_d_port = data[1]
     cur_time = data[2].strftime("%Y-%m-%d %H:%M:%S")
-    yaml_update = {"log_path": log_path, "last_update_time": cur_time, "last_d_port": cur_d_port}
+    yaml_update = {"last_update_time": cur_time, "last_d_port": cur_d_port}
     with open(path, 'w', encoding='utf-8') as f:
         yaml.dump(yaml_update, f, allow_unicode=False)
