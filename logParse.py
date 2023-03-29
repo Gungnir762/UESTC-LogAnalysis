@@ -79,7 +79,7 @@ def get_message_list(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
                 continue
 
             # 密码正确
-            if strlist[3] == "Accepted":
+            if strlist[3] == "Accepted" and strlist[4] == "password":
                 name = strlist[6]
                 s_ip = strlist[8]
                 s_port = strlist[10]
@@ -87,11 +87,20 @@ def get_message_list(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
                     Message(time, "correct.password", name, s_ip, s_port, int(sshd_check.group(1))))
 
             # 密码错误
-            elif strlist[3] == "Failed":
+            elif strlist[3] == "Failed" and strlist[4] == "password":
+                if strlist[11] == "port":
+                    continue
                 name = strlist[6]
                 s_ip = strlist[8]
                 s_port = strlist[10]
                 message_list.append(Message(time, "wrong.password", name, s_ip, s_port, int(sshd_check.group(1))))
+
+            # 用户名不存在
+            elif strlist[3] == "Invalid" and strlist[4] == "user":
+                name = strlist[5]
+                s_ip = strlist[7]
+                s_port = strlist[9]
+                message_list.append(Message(time, "invalid.user", name, s_ip, s_port, int(sshd_check.group(1))))
 
             # 会话状态
             elif strlist[3] == "pam_unix(sshd:session):":
