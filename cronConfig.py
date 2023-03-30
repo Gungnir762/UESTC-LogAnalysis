@@ -40,3 +40,5 @@ if __name__ == '__main__':
         print("restarting cron service")
     subprocess.call("sudo service cron restart", shell=True)
     print('cron.write() was just executed')
+
+# python cronConfig.py -p /home/zyr/test/UESTC-LogAnalysis

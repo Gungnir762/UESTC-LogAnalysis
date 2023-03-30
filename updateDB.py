@@ -1,8 +1,7 @@
 import argparse
 import os
-import subprocess
+import socket
 from datetime import datetime
-import requests
 import yaml
 from flask import Flask
 from IPy import IP
@@ -25,11 +24,10 @@ db.init_app(app)
 #     response = requests.get(url, headers=headers)
 #     return response.json()['ip']
 
-def get_ip():  # 获取局域网ip
-    p = subprocess.Popen("ifconfig | grep -m 1 'inet'", shell=True, stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT, encoding='utf-8')
-    result = p.communicate()[0]
-    ip = list(filter(None, result.split(" ")))[1]
+def get_ip():  # 获取局域网ip，只能在unix系统下得到正确结果
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
     return ip
 
 
@@ -82,3 +80,5 @@ if __name__ == "__main__":
     yaml_update = {"last_update_time": cur_time, "last_d_port": cur_d_port}
     with open(path, 'w', encoding='utf-8') as f:
         yaml.dump(yaml_update, f, allow_unicode=False)
+
+# python updateDB.py -p /home/zyr/test/UESTC-LogAnalysis
