@@ -34,8 +34,11 @@ if __name__ == '__main__':
         # 测试用
         # job = cron.new(command=rf'echo "hello world,`date`" >> {program_path}cron.log')
         job = cron.new(
-            command=rf'python3 {program_path}updateDB.py -p {program_path} -l {log_path} >> {program_path}cron.log 2>&1 </dev/null &')
+            command=rf'python3 {program_path}/updateDB.py -p {program_path} -l {log_path} >> '
+                    rf'{program_path}/cron.log 2>&1 </dev/null &')
         job.minute.every(cron_interval)
         print("restarting cron service")
     subprocess.call("sudo service cron restart", shell=True)
     print('cron.write() was just executed')
+
+# python cronConfig.py -p /home/zyr/test/UESTC-LogAnalysis

@@ -1,7 +1,7 @@
 import argparse
 import os
+import socket
 from datetime import datetime
-import requests
 import yaml
 from flask import Flask
 from IPy import IP
@@ -15,14 +15,20 @@ app.config.from_object('config')
 db.init_app(app)
 
 
-def get_ip():
-    # return requests.get('http://myip.ipip.net', timeout=5).text
-    url = 'https://ip.cn/api/index?ip=&type=0'
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-                      '(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-    response = requests.get(url, headers=headers)
-    return response.json()['ip']
+# def get_global_ip():#获取公网ip
+#     # return requests.get('http://myip.ipip.net', timeout=5).text
+#     url = 'https://ip.cn/api/index?ip=&type=0'
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+#                       '(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+#     response = requests.get(url, headers=headers)
+#     return response.json()['ip']
+
+def get_ip():  # 获取局域网ip，只能在unix系统下得到正确结果
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
+    return ip
 
 
 def insert_data(data):
@@ -74,3 +80,5 @@ if __name__ == "__main__":
     yaml_update = {"last_update_time": cur_time, "last_d_port": cur_d_port}
     with open(path, 'w', encoding='utf-8') as f:
         yaml.dump(yaml_update, f, allow_unicode=False)
+
+# python updateDB.py -p /home/zyr/test/UESTC-LogAnalysis
