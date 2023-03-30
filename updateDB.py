@@ -50,7 +50,7 @@ def insert_data(data):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Test for argparse')
+    parser = argparse.ArgumentParser(description='updateDB')
     parser.add_argument('--log_path', '-l', help='log_path，非必要参数，但是有默认值',
                         default="/home/zyr/test/UESTC-LogAnalysis/forensics.log")
     parser.add_argument('--program_path', '-p', help='program_path 程序所在路径 必要参数')
