@@ -1,5 +1,6 @@
 import argparse
 import os
+import subprocess
 from datetime import datetime
 import requests
 import yaml
@@ -15,14 +16,21 @@ app.config.from_object('config')
 db.init_app(app)
 
 
-def get_ip():
-    # return requests.get('http://myip.ipip.net', timeout=5).text
-    url = 'https://ip.cn/api/index?ip=&type=0'
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-                      '(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-    response = requests.get(url, headers=headers)
-    return response.json()['ip']
+# def get_global_ip():#获取公网ip
+#     # return requests.get('http://myip.ipip.net', timeout=5).text
+#     url = 'https://ip.cn/api/index?ip=&type=0'
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+#                       '(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+#     response = requests.get(url, headers=headers)
+#     return response.json()['ip']
+
+def get_ip():  # 获取局域网ip
+    p = subprocess.Popen("ifconfig | grep -m 1 'inet'", shell=True, stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT, encoding='utf-8')
+    result = p.communicate()[0]
+    ip = list(filter(None, result.split(" ")))[1]
+    return ip
 
 
 def insert_data(data):
