@@ -31,6 +31,7 @@ def get_ip():  # 获取局域网ip，只能在unix系统下得到正确结果
     return ip
 
 
+# 写入数据库
 def insert_data(data):
     event_data_list = data[0]
     d_ip = get_ip()  # "192.168.44.136"

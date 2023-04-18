@@ -5,6 +5,7 @@ import argparse
 import os
 
 
+# 读取yaml配置文件
 def read_config(path):
     with open(path, 'r', encoding='utf-8') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
@@ -30,6 +31,7 @@ if __name__ == '__main__':
     # print(config)
     # print(type(config))
 
+    # 添加定时任务
     with CronTab(user=user) as cron:
         # 测试用
         # job = cron.new(command=rf'echo "hello world,`date`" >> {program_path}cron.log')

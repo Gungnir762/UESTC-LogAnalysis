@@ -1,6 +1,7 @@
 from exts import db
 
 
+# 以下为数据库模型
 class event(db.Model):
     __tablename__ = "event"
     event_id = db.Column(db.Integer, primary_key=True, autoincrement=True)

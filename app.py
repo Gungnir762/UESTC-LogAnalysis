@@ -12,7 +12,7 @@ db.init_app(app)
 def index():
     return render_template('index.html')
 
-
+# 以下为查询页面
 @app.route('/by_date/')
 def by_date():
     return render_template('by_date.html')
@@ -27,7 +27,7 @@ def by_login_event():
 def by_user():
     return render_template('by_user.html')
 
-
+# 以下为查询结果页面
 @app.route('/by_date_query/', methods=['POST'])
 def by_date_query():
     date_begin = request.form["date_begin"]

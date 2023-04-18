@@ -1,3 +1,4 @@
+# 数据库连接的配置文件
 HOSTNAME = 'localhost'
 PORT = '3306'
 DATABASE = 'forensicsdb'
