@@ -1,3 +1,8 @@
+"""
+author:zyr
+function:执行该文件时将日志文件中的数据写入数据库
+notice:获取公网ip的方法在unix系统下无法获取正确结果
+"""
 import argparse
 import os
 import socket
@@ -33,7 +38,12 @@ def get_ip():  # 获取局域网ip，只能在unix系统下得到正确结果
 
 # 写入数据库
 def insert_data(data):
+    """
+    :param data: logParse.py中get_message_list的返回值
+    :return: None
+    """
     event_data_list = data[0]
+    # ip需要特殊转换
     d_ip = get_ip()  # "192.168.44.136"
 
     # print(d_ip)
@@ -45,12 +55,13 @@ def insert_data(data):
                   e_data["d_port"], e_data["time"])
         print(e_data)
         print(e)
-        # ip需要特殊转换
+        # 数据库批量提交
         db.session.add(e)
     db.session.commit()
 
 
 if __name__ == "__main__":
+    # 读取命令行参数
     parser = argparse.ArgumentParser(description='updateDB')
     parser.add_argument('--log_path', '-l', help='log_path，非必要参数，但是有默认值',
                         default="/home/zyr/test/UESTC-LogAnalysis/forensics.log")

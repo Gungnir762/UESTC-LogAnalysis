@@ -1,3 +1,8 @@
+"""
+author:zyr
+function:flask的主程序入口，提供路由
+notice:None
+"""
 import sqlalchemy
 from flask import Flask, render_template, request
 from exts import db
@@ -11,6 +16,7 @@ db.init_app(app)
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 # 以下为查询页面
 @app.route('/by_date/')
@@ -26,6 +32,7 @@ def by_login_event():
 @app.route('/by_user/')
 def by_user():
     return render_template('by_user.html')
+
 
 # 以下为查询结果页面
 @app.route('/by_date_query/', methods=['POST'])

@@ -1,4 +1,8 @@
-# 数据库连接的配置文件
+"""
+author:zyr
+function:数据库连接的配置文件
+notice:None
+"""
 HOSTNAME = 'localhost'
 PORT = '3306'
 DATABASE = 'forensicsdb'

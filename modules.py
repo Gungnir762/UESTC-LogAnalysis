@@ -4,6 +4,7 @@ from exts import db
 # 以下为数据库模型
 class event(db.Model):
     __tablename__ = "event"
+    # 字段名及类型
     event_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     type = db.Column(db.String(24), nullable=False)
     username = db.Column(db.String(24), nullable=False)
