@@ -1,3 +1,8 @@
+"""
+author:zyr
+function:运行程序时，自动添加定时任务
+notice:None
+"""
 from crontab import CronTab
 import subprocess
 import yaml
@@ -5,6 +10,7 @@ import argparse
 import os
 
 
+# 读取yaml配置文件
 def read_config(path):
     with open(path, 'r', encoding='utf-8') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
@@ -12,7 +18,8 @@ def read_config(path):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Test for argparse')
+    # 读取命令行参数
+    parser = argparse.ArgumentParser(description='cron config')
     parser.add_argument('--program_path', '-p', help='program_path 程序所在路径 必要参数')
     parser.add_argument('--log_path', '-l', help='log_path，非必要参数，但是有默认值',
                         default="/home/zyr/test/UESTC-LogAnalysis/forensics.log")
@@ -22,6 +29,7 @@ if __name__ == '__main__':
     # print(program_path)
     # print(log_path)
 
+    # 读取配置文件
     path = os.path.abspath(os.path.join(program_path, r'./config/cronConfig.yaml'))
     config = read_config(path)
     user = config['user']
@@ -30,6 +38,7 @@ if __name__ == '__main__':
     # print(config)
     # print(type(config))
 
+    # 添加定时任务
     with CronTab(user=user) as cron:
         # 测试用
         # job = cron.new(command=rf'echo "hello world,`date`" >> {program_path}cron.log')
