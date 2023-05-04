@@ -1,15 +1,21 @@
+"""
+author:冯宇扬
+function:分析日志文件内容
+notice:None
+"""
 import re
 from datetime import datetime, timedelta
 
 
+# 储存解析的日志消息的类
 class Message(object):
     def __init__(self, time, log_type, username, s_ip, s_port, session_id):
-        self.time = time
-        self.log_type = log_type
-        self.username = username
-        self.s_ip = s_ip
-        self.s_port = s_port
-        self.session_id = session_id
+        self.time = time  # 日志产生时间
+        self.log_type = log_type  # 日志类型
+        self.username = username  # 用户名
+        self.s_ip = s_ip  # 用户ip
+        self.s_port = s_port  # 用户端口
+        self.session_id = session_id  # 会话id
         return
 
     def set_d_port(self, d_port):
@@ -141,6 +147,7 @@ def get_message_list(file_path, last_d_port='', last_time=datetime(2000, 1, 1)):
     return [dict_list, cur_d_port, cur_time]
 
 
+# 调试代码
 if __name__ == "__main__":
     data = get_message_list("./forensics.log")
     print(rf"cur_d_port: {data[1]}")
